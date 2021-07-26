@@ -1,4 +1,4 @@
-For generating mmloc training, validation and test data, four files need to be execute. Put all rawdata(xml) in rawdata folder and take following steps:
+For generating mmloc training, validation and test data, four files need to be execute. Create datafolder "rawdata" here, and put all rawdata(xml) in rawdata folder and take following steps:
 1. Running sensordata_processing.py
 2. Running wifidata_processing.py
 3. Running combine_sensor_wifi.cpp
