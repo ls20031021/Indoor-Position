@@ -4,7 +4,7 @@ This is the code repo for paper MM-Loc: Cross-sensor Indoor Smartphone Location 
 
 # Dataprocessing
 
-Put rawdata after collection in the folder and follow the steps in readme, to generate machine learning data.
+Convert raw data to machine learning data, with a readme file for user.
 
 # Train and test
 To debug all models, the following commands can be used as example:
