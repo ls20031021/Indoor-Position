@@ -21,7 +21,7 @@ flags.DEFINE_integer("wifi_input_size", default="102", help="wifi rss feature nu
 flags.DEFINE_integer("hidden_size", default="128", help="hidden size of deep learning models")
 flags.DEFINE_float("learning_rate", default="0.005", help="learning rate")
 flags.DEFINE_integer("batch_size", default="100", help="training batch sizes")
-flags.DEFINE_integer("epoch", default="20", help="training epochs")
+flags.DEFINE_integer("epoch", default="5", help="training epochs")
 FLAGS = flags.FLAGS
 
 def main(_):
