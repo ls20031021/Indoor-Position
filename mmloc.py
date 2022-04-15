@@ -1,14 +1,17 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import math
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+
 import visualization as v
 import pandas as pd
 from absl import flags
-from keras.models import Sequential,Model,load_model
-from keras.layers import Dense, concatenate, LSTM,Input,ReLU,Multiply,Add
-from keras.optimizers import Adam, RMSprop
-from keras.callbacks import EarlyStopping, Callback, TensorBoard
+
+
+from tensorflow.keras.models import Sequential,Model,load_model
+from tensorflow.keras.layers import Dense, concatenate, LSTM,Input,ReLU,Multiply,Add
+from tensorflow.keras.optimizers import Adam, RMSprop
+from tensorflow.keras.callbacks import EarlyStopping, Callback, TensorBoard
 
 np.random.seed(7)
 
@@ -75,7 +78,7 @@ def main(_):
     mmloc.save(scenario+"/model/"+str(model_name)+".h5")
 
     locPrediction = mmloc.predict([SensorTest,WifiTest], batch_size=batch_size)
-    aveLocPrediction = pf.get_ave_prediction(locPrediction, batch_size)
+    aveLocPrediction = v.get_ave_prediction(locPrediction, batch_size)
     #visualization for error line and location prediction
     v.visualization(locationtest,locPrediction,model_name)
     #print location prediction picture
