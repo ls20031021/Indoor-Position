@@ -1,0 +1,9 @@
+
+*.pyc
+.idea/vcs.xml
+.idea/modules.xml
+.idea/MMLoc.iml
+.idea/misc.xml
+.idea/inspectionProfiles/profiles_settings.xml
+.DS_Store
+logs/mmloc_scenarioA_overlap/train/events.out.tfevents.1650104260.Simon.8854.0.v2
