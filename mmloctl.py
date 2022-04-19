@@ -11,14 +11,40 @@ import matplotlib.pyplot as plt
 import math
 import pandas as pd
 import visualization as v
+from absl import flags
 
+import tensorflow.compat.v1 as tf
+
+from tf.keras.models import Sequential,Model,load_model
+from tensorflow.keras.layers import Dense, concatenate, LSTM,Input,ReLU,Multiply,Add
+from tensorflow.keras.optimizers import Adam, RMSprop
+from tensorflow.keras.callbacks import EarlyStopping, Callback, TensorBoard
+
+import os
 import torch
-import torch.nn as nn
+from torch import nn
+
+
+
+# Define Parameters
+flags.DEFINE_string("scenario", default="scenarioA", help="select scenarioA or scenarioB")
+flags.DEFINE_integer("wifi_input_size", default="102", help="wifi rss feature numbers")
+flags.DEFINE_integer("hidden_size", default="128", help="hidden size of deep learning models")
+flags.DEFINE_float("learning_rate", default="0.005", help="learning rate")
+flags.DEFINE_integer("batch_size", default="100", help="training batch sizes")
+flags.DEFINE_integer("epoch", default="5", help="training epochs")
+flags.DEFINE_integer("model_name", default="mmloc_scenarioA", help="Model Name")
+FLAGS = flags.FLAGS
+
+scenario=FLAGS.scenario
+wifi_input_size = FLAGS.wifi_input_size
+hidden_size = FLAGS.hidden_size
+batch_size = FLAGS.batch_size
+epoch = FLAGS.epoch
+learning_rate = FLAGS.learning_rate
+model_name = FLAGS.model_name
 
 #load data
-scenario="scenarioA"
-
-
 SensorTrain=np.load(scenario+"/overlap_timestep1000/overlap_ds_sensor_train.npy")
 locationtrain=np.load(scenario+"/overlap_timestep1000/overlap_ds_location_train.npy")
 WifiTrain=np.load(scenario+"/overlap_timestep1000/overlap_ds_wifi_train.npy")
@@ -30,3 +56,33 @@ WifiVal=np.load(scenario+"/overlap_timestep1000/overlap_ds_wifi_val.npy")
 SensorTest=np.load(scenario+"/overlap_timestep1000/overlap_ds_sensor_test.npy")
 locationtest=np.load(scenario+"/overlap_timestep1000/overlap_ds_location_test.npy")
 WifiTest=np.load(scenario+"/overlap_timestep1000/overlap_ds_wifi_test.npy")
+
+#construct mmloc model
+sensorinput=Input(shape=(SensorTrain.shape[1], SensorTrain.shape[2]))
+sensoroutput=LSTM(input_shape=(SensorTrain.shape[1], SensorTrain.shape[2]),units=hidden_size)(sensorinput)
+
+wifiinput=Input(shape=(wifi_input_size,))
+wifi=Dense(hidden_size)(wifiinput)
+wifi=ReLU()(wifi)
+wifi=Dense(hidden_size)(wifi)
+wifi=ReLU()(wifi)
+wifioutput=Dense(hidden_size)(wifi)
+
+merge=concatenate([sensoroutput,wifioutput])
+hidden=Dense(hidden_size,activation='relu')(merge)
+output=Dense(2,activation='relu')(hidden)
+mmloc=Model(inputs=[sensorinput,wifiinput],outputs=[output])
+
+mmloc.compile(optimizer=RMSprop(learning_rate),
+                 loss='mse',metrics=['acc'])
+
+tensorboard = TensorBoard(log_dir='logs/{}'.format(model_name))
+
+mmloc.fit([SensorTrain,WifiTrain], locationtrain,
+                       validation_data=([SensorVal,WifiVal],locationval),
+                       epochs=epoch, batch_size=batch_size, verbose=1,callbacks=[tensorboard]
+                       #shuffle=False,
+                       )
+
+#save model
+mmloc.save(scenario+"/model/"+str(model_name)+".h5")
