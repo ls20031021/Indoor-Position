@@ -33,13 +33,24 @@ def del_all_flags(FLAGS):
         
 del_all_flags(flags.FLAGS)
 
-#Define Parameters
+#Define Parameters ScenarioA
 flags.DEFINE_string("scenario", default="scenarioA", help="select scenarioA or scenarioB")
 flags.DEFINE_integer("wifi_input_size", default="102", help="wifi rss feature numbers")
 flags.DEFINE_integer("hidden_size", default="128", help="hidden size of deep learning models")
 flags.DEFINE_float("learning_rate", default="0.005", help="learning rate")
 flags.DEFINE_integer("batch_size", default="100", help="training batch sizes")
 flags.DEFINE_integer("epoch", default="50", help="training epochs")
+flags.DEFINE_string("model_name", default="mmloc_scenarioA_overlap", help="model name")
+FLAGS = flags.FLAGS
+
+#Define Parameters ScenarioB
+flags.DEFINE_string("scenario", default="scenarioB", help="select scenarioA or scenarioB")
+flags.DEFINE_integer("wifi_input_size", default="750", help="wifi rss feature numbers")
+flags.DEFINE_integer("hidden_size", default="128", help="hidden size of deep learning models")
+flags.DEFINE_float("learning_rate", default="0.005", help="learning rate")
+flags.DEFINE_integer("batch_size", default="100", help="training batch sizes")
+flags.DEFINE_integer("epoch", default="50", help="training epochs")
+flags.DEFINE_string("model_name", default="mmloc_scenarioB_overlap", help="model name")
 FLAGS = flags.FLAGS
 
 
@@ -49,7 +60,7 @@ batch_size = FLAGS.batch_size
 epoch = FLAGS.epoch
 learning_rate = FLAGS.learning_rate
 scenario=FLAGS.scenario
-model_name = "mmloc_scenarioA_overlap"
+model_name = FLAGS.model_name
 
 #Load data
 SensorTrain=np.load(scenario+"/overlap_timestep1000/overlap_ds_sensor_train.npy")
@@ -65,7 +76,7 @@ locationtest=np.load(scenario+"/overlap_timestep1000/overlap_ds_location_test.np
 WifiTest=np.load(scenario+"/overlap_timestep1000/overlap_ds_wifi_test.npy")
 
 #Load trained model
-model=load_model("ScenarioA/model/"+str(model_name)+".h5")
+model=load_model(str(scenario)+"/model/"+str(model_name)+".h5")
 
 # for i in range (0,len(model.layers)):
 #     print (i, model.layers[i])
