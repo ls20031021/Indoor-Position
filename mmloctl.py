@@ -15,7 +15,7 @@ from absl import flags
 
 import tensorflow.compat.v1 as tf
 
-from tf.keras.models import Sequential,Model,load_model
+from tensorflow.keras.models import Sequential,Model,load_model
 from tensorflow.keras.layers import Dense, concatenate, LSTM,Input,ReLU,Multiply,Add
 from tensorflow.keras.optimizers import Adam, RMSprop
 from tensorflow.keras.callbacks import EarlyStopping, Callback, TensorBoard
