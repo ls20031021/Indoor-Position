@@ -24,35 +24,8 @@ from tensorflow.keras.callbacks import EarlyStopping, Callback, TensorBoard
 from tensorflow.keras.utils import plot_model
 
 
-
-def del_all_flags(FLAGS):
-    flags_dict = FLAGS._flags()
-    keys_list = [keys for keys in flags_dict]
-    for keys in keys_list:
-        FLAGS.__delattr__(keys)
-        
-del_all_flags(flags.FLAGS)
-
-#Define Parameters ScenarioA
-flags.DEFINE_string("scenario", default="scenarioA", help="select scenarioA or scenarioB")
-flags.DEFINE_integer("wifi_input_size", default="102", help="wifi rss feature numbers")
-flags.DEFINE_integer("hidden_size", default="128", help="hidden size of deep learning models")
-flags.DEFINE_float("learning_rate", default="0.005", help="learning rate")
-flags.DEFINE_integer("batch_size", default="100", help="training batch sizes")
-flags.DEFINE_integer("epoch", default="50", help="training epochs")
-flags.DEFINE_string("model_name", default="mmloc_scenarioA_overlap", help="model name")
-FLAGS = flags.FLAGS
-
-#Define Parameters ScenarioB
-flags.DEFINE_string("scenario", default="scenarioB", help="select scenarioA or scenarioB")
-flags.DEFINE_integer("wifi_input_size", default="750", help="wifi rss feature numbers")
-flags.DEFINE_integer("hidden_size", default="128", help="hidden size of deep learning models")
-flags.DEFINE_float("learning_rate", default="0.005", help="learning rate")
-flags.DEFINE_integer("batch_size", default="100", help="training batch sizes")
-flags.DEFINE_integer("epoch", default="50", help="training epochs")
-flags.DEFINE_string("model_name", default="mmloc_scenarioB_overlap", help="model name")
-FLAGS = flags.FLAGS
-
+#Choose Scenario: Type A or B to select loading data.
+FLAGS=v.choose_scenario('A')
 
 wifi_input_size = FLAGS.wifi_input_size
 hidden_size = FLAGS.hidden_size

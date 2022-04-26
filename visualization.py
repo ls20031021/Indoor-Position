@@ -4,7 +4,39 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
+from tensorflow.compat.v1 import flags
 
+def del_all_flags(FLAGS):
+    flags_dict = FLAGS._flags()
+    keys_list = [keys for keys in flags_dict]
+    for keys in keys_list:
+        FLAGS.__delattr__(keys)
+        
+
+
+def choose_scenario(scenario):   
+    del_all_flags(flags.FLAGS)
+    if scenario=='A':
+        #Define Parameters ScenarioA
+        flags.DEFINE_string("scenario", default="scenarioA", help="select scenarioA or scenarioB")
+        flags.DEFINE_integer("wifi_input_size", default="102", help="wifi rss feature numbers")
+        flags.DEFINE_integer("hidden_size", default="128", help="hidden size of deep learning models")
+        flags.DEFINE_float("learning_rate", default="0.005", help="learning rate")
+        flags.DEFINE_integer("batch_size", default="100", help="training batch sizes")
+        flags.DEFINE_integer("epoch", default="50", help="training epochs")
+        flags.DEFINE_string("model_name", default="mmloc_scenarioA_overlap", help="model name")
+        FLAGS = flags.FLAGS
+    elif scenario=='B':
+    #Define Parameters ScenarioB
+        flags.DEFINE_string("scenario", default="scenarioB", help="select scenarioA or scenarioB")
+        flags.DEFINE_integer("wifi_input_size", default="750", help="wifi rss feature numbers")
+        flags.DEFINE_integer("hidden_size", default="128", help="hidden size of deep learning models")
+        flags.DEFINE_float("learning_rate", default="0.005", help="learning rate")
+        flags.DEFINE_integer("batch_size", default="100", help="training batch sizes")
+        flags.DEFINE_integer("epoch", default="50", help="training epochs")
+        flags.DEFINE_string("model_name", default="mmloc_scenarioB_overlap", help="model name")
+        FLAGS = flags.FLAGS
+    return FLAGS    
 
 def normalized_data_to_utm(dd):
     min_c1 = 0
