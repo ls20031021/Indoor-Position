@@ -23,7 +23,7 @@ def choose_scenario(scenario):
         flags.DEFINE_integer("hidden_size", default="128", help="hidden size of deep learning models")
         flags.DEFINE_float("learning_rate", default="0.005", help="learning rate")
         flags.DEFINE_integer("batch_size", default="100", help="training batch sizes")
-        flags.DEFINE_integer("epoch", default="50", help="training epochs")
+        flags.DEFINE_integer("epoch", default="100", help="training epochs")
         flags.DEFINE_string("model_name", default="mmloc_scenarioA_overlap", help="model name")
         FLAGS = flags.FLAGS
     elif scenario=='B':
@@ -33,7 +33,7 @@ def choose_scenario(scenario):
         flags.DEFINE_integer("hidden_size", default="128", help="hidden size of deep learning models")
         flags.DEFINE_float("learning_rate", default="0.005", help="learning rate")
         flags.DEFINE_integer("batch_size", default="100", help="training batch sizes")
-        flags.DEFINE_integer("epoch", default="50", help="training epochs")
+        flags.DEFINE_integer("epoch", default="100", help="training epochs")
         flags.DEFINE_string("model_name", default="mmloc_scenarioB_overlap", help="model name")
         FLAGS = flags.FLAGS
     return FLAGS    
@@ -108,17 +108,17 @@ def visualization(locationtest, locPrediction, suffix):
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.grid(True,linestyle='--',linewidth=1)
-    ax.set_xlabel("x-longitude")
-    ax.set_ylabel("y-latitude")
+    ax.set_xlabel("X-longitude")
+    ax.set_ylabel("Y-latitude")
 
     Y_test = np.array(Y_test)
     for target, pred, i in zip(Y_test, Y_pre, range(np.shape(Y_test)[0])):
         plt.plot([pred[0], target[0]], [pred[1], target[1]], color='r',
-                 linewidth=0.5, label='error line' if i == 0 else "")
-        plt.scatter(pred[0], pred[1], label='prediction' if i == 0 else "", color='b', marker='.')
-        plt.scatter(target[0], target[1], label='target' if i == 0 else "", color='c', marker='.')
-    ax.set_title("Prection Footpath")
-    ax.legend()
+                 linewidth=0.5, label='Error Line' if i == 0 else "")
+        plt.scatter(pred[0], pred[1], label='Prediction' if i == 0 else "", color='b', marker='.')
+        plt.scatter(target[0], target[1], label='Target' if i == 0 else "", color='c', marker='.')
+    ax.set_title("Prection Trajectory")
+    ax.legend(loc='upper right')
     # save error line fig
     fig.savefig("errors_visualization_" + str(suffix) + ".pdf")
 
@@ -130,17 +130,17 @@ def draw_cdf_picture(locationtest,locPrediction,model_name,scenario):
     plt.ylim((0,1))
     plt.xlabel("metres")
     plt.ylabel("CDF")
-    plt.legend(str(model_name),loc='upper right')
     plt.grid(True)
     plt.title((str(model_name)+' CDF'))
+    plt.legend(loc='upper right')
     fig.savefig(scenario+"/cdf/"+str(model_name)+"_CDF.pdf")
     
 def print_locprediction(locationtest,aveLocPrediction,model_name,scenario):
     fig=plt.figure()
     data=normalized_data_to_utm(np.hstack((locationtest, aveLocPrediction)))
     plt.plot(data[:,0],data[:,1],'b',data[:,2],data[:,3],'r')
-    plt.legend(['target','prediction'],loc='upper right')
-    plt.xlabel("x-latitude")
-    plt.ylabel("y-longitude")
+    plt.legend(['Target','Prediction'],loc='upper right')
+    plt.xlabel("X-latitude")
+    plt.ylabel("Y-longitude")
     plt.title(str(model_name)+" Prediction")
     fig.savefig(scenario+"/predictionpng/"+str(model_name)+"_locprediction.png")

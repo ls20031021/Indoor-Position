@@ -2,3 +2,7 @@
 *.pyc
 .DS_Store
 *.csv
+*.v2
+*.pdf
+*.png
+*.h5
