@@ -39,11 +39,17 @@ def choose_scenario(scenario):
     return FLAGS    
 
 def normalized_data_to_utm(dd):
+#for scenarioa
     min_c1 = 0
     max_c1 = 39.76
     min_c2 = 0
     max_c2 = 32.63
-
+#for scenariob
+    # min_c1 = 0
+    # max_c1 = 39.76
+    # min_c2 = 0
+    # max_c2 = 32.63
+        
     d1 = dd[:, 0]
     d2 = dd[:, 1]
     d3 = dd[:, 2]

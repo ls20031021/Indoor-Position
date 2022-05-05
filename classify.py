@@ -21,20 +21,62 @@ from tensorflow.keras.optimizers import Adam, RMSprop
 from tensorflow.keras.callbacks import EarlyStopping, Callback, TensorBoard
 from tensorflow.keras.utils import plot_model
 
-trainA=pd.read_csv('points/trainA.csv')
-valA=pd.read_csv('points/valA.csv')
-testA=pd.read_csv('points/testA.csv')
+trainA=pd.read_csv('points/trainA.csv', header=None)
+valA=pd.read_csv('points/valA.csv', header=None)
+testA=pd.read_csv('points/testA.csv', header=None)
 
-trainB=pd.read_csv('points/trainB.csv')
-valB=pd.read_csv('points/valB.csv')
-testB=pd.read_csv('points/testB.csv')
+trainB=pd.read_csv('points/trainB.csv', header=None)
+valB=pd.read_csv('points/valB.csv', header=None)
+testB=pd.read_csv('points/testB.csv', header=None)
+
+scenario='scenarioA'
+
+SensorTrain=np.load(scenario+"/overlap_timestep1000/overlap_ds_sensor_train.npy")
+locationtrainA=np.load(scenario+"/overlap_timestep1000/overlap_ds_location_train.npy")
+
+SensorVal=np.load(scenario+"/overlap_timestep1000/overlap_ds_sensor_val.npy")
+locationvalA=np.load(scenario+"/overlap_timestep1000/overlap_ds_location_val.npy")
+
+SensorTest=np.load(scenario+"/overlap_timestep1000/overlap_ds_sensor_test.npy")
+locationtestA=np.load(scenario+"/overlap_timestep1000/overlap_ds_location_test.npy")
+
+
+plt.scatter(locationtestA[:,0],locationtestA[:,1])
+plt.scatter(locationtestA[(841-20):(841+20),0],locationtestA[(841-20):(841+20),1])
 
 
 
-locationtrainA=np.load("scenarioA/overlap_timestep1000/overlap_ds_location_train.npy")
 
+totalpoints=5
 
-locationvalA=np.load("scenarioA/overlap_timestep1000/overlap_ds_location_val.npy")
+for i in range(len(testA)//totalpoints):
+    for j in range (0,totalpoints):
+        if 1 < j < totalpoints:
+            a
+        print (testA.iloc[j,0])
+    print ('round'+str(i))
 
+for j in range(len(df)):    
+    for q in range (0, df.iloc[-1,0]):
+        a=np.append(a,label)       
+        if q == df.iloc[j,0]:
+            label=label+1
+            print ('break when q is '+str(q))
+        break
+    print(j)
+    
+df=testA
 
-locationtestA=np.load("scenarioA/overlap_timestep1000/overlap_ds_location_test.npy")
+a=[]
+q=0    
+
+label=0
+    
+a=[]  
+for q in range (0, df.iloc[-1,0]+1):
+    a=np.append(a,label) 
+    if q == df.iloc[label,0]:
+        label=label+1
+        print ('break when q is '+str(q))
+ 
+a=a[1::]
