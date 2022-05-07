@@ -39,27 +39,77 @@ testB=pd.read_csv('points/testB.csv', header=None)
 
 
 df=trainA
-
-
+        
 pointsnumber=5
 step=20
 count=0
+label=0
 round=0
-a=[[],[]]
+num=0
+a=np.zeros((1,2))
+#for num in range(0,2*(pointsnumber-2)+1):
 for i in df.iloc[:,0]:
     if  count==0:
-        a=np.append(a,i-1)
-
+        t=np.array([[i-1,label]])
+        a=np.concatenate((a,t),axis=0)
         count=count+1
+        label=label+1
+        #num=num+1
+        # if num==df.iloc[i,0]-step:
+        #     label=label+1
+        #     print('here1')
+        
 
     elif 0 < count < pointsnumber-1:
-        a=np.append(a,i-step)
-        a=np.append(a,i+step)
-
+        t=np.array([[i-step,label]])
+        a=np.concatenate((a,t),axis=0)
+        label=label+1
+        t=np.array([[i+step,label]])
+        a=np.concatenate((a,t),axis=0)
         count=count+1
-    else:
-        a=np.append(a,i)
+        label=label+1
+        if label==(2*(pointsnumber-2)+1):
+            label=2*(pointsnumber-2)
 
+    else:
+        t=np.array([[i,label]])
+        a=np.concatenate((a,t),axis=0)
         count=0
+        label=0
+
         round=round+1
         print('Round '+str(round)+' finish')
+a=a[1::] #drop the first initial row of zeros
+
+cnt=0
+b=np.zeros((1,2))
+
+for i in range (0, int(a[-1,0])+1):
+    if i == a[cnt,0]:
+        tag=a[cnt,0]
+        cnt=cnt+1
+    tem=np.array([[i,tag]])
+    b=np.concatenate((b,tem),axis=0)
+
+b=b[1::]    
+
+
+
+for i in range (0, int(a[-1,0])+1):
+    for j in range (0, len(a)+1):
+        if i == int(a[j,0]):
+            tag=a[j,1]
+        tem=np.array([[i,tag]])
+        b=np.concatenate((b,tem),axis=0)
+        cnt=cnt+1
+b=b[1::]    
+
+
+
+
+# for i in a:
+#     tem=np.array
+#     if cnt == a[i,0]:
+#         tem[cnt,1]=a[i,1]
+#     b=np.array([[b,tem]])
+#     cnt=cnt+1
