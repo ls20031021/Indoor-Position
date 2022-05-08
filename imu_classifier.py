@@ -72,7 +72,7 @@ testB=pd.read_csv('points/testB.csv', header=None)
 
 imu_train_class = v.get_imu_labels(trainA, pointsnumber, step)
 tags = np.unique(imu_train_class)
-num_class=tags.shape
+num_class=tags.shape[0]
 
 imu_val_class = v.get_imu_labels(valA, pointsnumber, step)
 
@@ -91,7 +91,7 @@ output=Dense(num_class,activation='softmax')(imuoutput)
 imu_classfier=Model(inputs=[imuinput],outputs=[output])
 imu_classfier.compile(
     optimizer=Adam(1e-3),
-    loss="crossentropy",
+    loss="sparse_categorical_crossentropy",
     metrics=["accuracy"],
 )
 
