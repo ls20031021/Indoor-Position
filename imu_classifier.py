@@ -29,9 +29,12 @@ hidden_size = FLAGS.hidden_size
 batch_size = FLAGS.batch_size
 scenario=FLAGS.scenario
 
-epoch = 600
-learning_rate = 0.0025
-model_name = 'MTLocA'
+epoch = 100
+learning_rate = 0.01
+pointsnumber=5
+step=20
+model_name = 'imu_classiferA'
+
 
 #Load data
 SensorTrain=np.load(scenario+"/overlap_timestep1000/overlap_ds_sensor_train.npy")
@@ -65,7 +68,38 @@ trainB=pd.read_csv('points/trainB.csv', header=None)
 valB=pd.read_csv('points/valB.csv', header=None)
 testB=pd.read_csv('points/testB.csv', header=None)
 
-pointsnumber=5
-step=20
+
 
 imu_train_class = v.get_imu_labels(trainA, pointsnumber, step)
+tags = np.unique(imu_train_class)
+num_class=tags.shape
+
+imu_val_class = v.get_imu_labels(valA, pointsnumber, step)
+
+imu_test_class = v.get_imu_labels(testA, pointsnumber, step)
+
+IMUTrain=SensorTrain[:,:,0:2]
+IMUVal=SensorVal[:,:,0:2]
+IMUTest=SensorTest[:,:,0:2]
+
+
+
+imuinput=Input(shape=(IMUTrain.shape[1], IMUTrain.shape[2]))
+imuoutput=LSTM(input_shape=(IMUTrain.shape[1], IMUTrain.shape[2]),units=hidden_size,name="IMU_Feature")(imuinput)
+output=Dense(num_class,activation='softmax')(imuoutput)
+
+imu_classfier=Model(inputs=[imuinput],outputs=[output])
+imu_classfier.compile(
+    optimizer=Adam(1e-3),
+    loss="crossentropy",
+    metrics=["accuracy"],
+)
+
+tensorboard = TensorBoard(log_dir='logs/{}'.format(model_name))
+imu_classfier.fit([IMUTrain], imu_train_class,
+                       validation_data=([IMUVal],imu_val_class),
+                       epochs=epoch, batch_size=batch_size, verbose=1,callbacks=[tensorboard]
+                       #shuffle=False,
+                       )
+
+

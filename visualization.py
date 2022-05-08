@@ -88,6 +88,8 @@ def get_imu_labels(df, pointsnumber, step):
         b=np.concatenate((b,tem),axis=0)
     b=b[1::]    
     b=b[:,1]
+
+
     return b
 
 def normalized_data_to_utm(dd):
