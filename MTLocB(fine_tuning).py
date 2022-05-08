@@ -17,7 +17,7 @@ from absl import flags
 from tensorflow.compat.v1 import flags
 
 from tensorflow.keras.models import Sequential,Model,load_model
-from tensorflow.keras.layers import Dense, concatenate, LSTM,Input,ReLU,Multiply,Add,GRU
+from tensorflow.keras.layers import Dense, concatenate, LSTM,Input,ReLU,Multiply,Add,GRU,Masking
 from tensorflow.keras.optimizers import Adam, RMSprop
 from tensorflow.keras.callbacks import EarlyStopping, Callback, TensorBoard
 from tensorflow.keras.utils import plot_model
@@ -42,15 +42,44 @@ scenario=FLAGS.scenario
 
 epoch = 100
 learning_rate = 0.0025
-model_name = 'MTLocB_8'
 
-
+num_rounds=0
+model_name = 'MTLocB_'+str(num_rounds)
 
 
 #Load data
 SensorTrain=np.load(scenario+"/overlap_timestep1000/overlap_ds_sensor_train.npy")
 locationtrain=np.load(scenario+"/overlap_timestep1000/overlap_ds_location_train.npy")
 WifiTrain=np.load(scenario+"/overlap_timestep1000/overlap_ds_wifi_train.npy")
+
+if num_rounds==8:
+    SensorTrain=SensorTrain
+
+if num_rounds==7:
+    SensorTrain[14590::,:]=0
+
+if num_rounds==6:
+    SensorTrain[12489::,:]=0
+    
+if num_rounds==5:
+    SensorTrain[10395::,:]=0
+    
+if num_rounds==4:
+    SensorTrain[8294::,:]=0
+
+if num_rounds==3:
+    SensorTrain[6134::,:]=0
+
+if num_rounds==2:
+    SensorTrain[4062::,:]=0
+
+if num_rounds==1:
+    SensorTrain[1994::,:]=0
+
+if num_rounds==0:
+    SensorTrain[0::,:]=0
+    
+    
 
 SensorVal=np.load(scenario+"/overlap_timestep1000/overlap_ds_sensor_val.npy")
 locationval=np.load(scenario+"/overlap_timestep1000/overlap_ds_location_val.npy")
@@ -71,6 +100,8 @@ MagVal=SensorVal[:,:,2:3]
 MagTest=SensorTest[:,:,2:3]
 
 
+
+
 #Load trained IMU Model
 IMU_Model=load_model("scenarioA/model/IMU_Model.h5")
 
@@ -86,7 +117,8 @@ lstm_extracted.trainable = True #make transfered layer trainable
 
 
 imuinput=Input(shape=(IMUTrain.shape[1], IMUTrain.shape[2]),name="IMU")
-imuoutput=lstm_extracted(imuinput)
+masked = Masking(mask_value =0,name="Masking")(imuinput)
+imuoutput=lstm_extracted(masked)
 
 
 maginput=Input(shape=(MagTrain.shape[1], MagTrain.shape[2]),name="MAG")
