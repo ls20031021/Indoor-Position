@@ -181,6 +181,8 @@ def visualization(locationtest, locPrediction, suffix):
     ax.legend(loc='upper right')
     # save error line fig
     fig.savefig("errors_visualization_" + str(suffix) + ".pdf")
+    print('error plotted')
+    return fig
 
 def draw_cdf_picture(locationtest,locPrediction,model_name,scenario):
     fig=plt.figure()
@@ -194,6 +196,8 @@ def draw_cdf_picture(locationtest,locPrediction,model_name,scenario):
     plt.title((str(model_name)+' CDF'))
     plt.legend(loc='upper right')
     fig.savefig(scenario+"/cdf/"+str(model_name)+"_CDF.pdf")
+    print('cdf plotted')
+    return fig
     
 def print_locprediction(locationtest,aveLocPrediction,model_name,scenario):
     fig=plt.figure()
@@ -204,3 +208,5 @@ def print_locprediction(locationtest,aveLocPrediction,model_name,scenario):
     plt.ylabel("Y-longitude")
     plt.title(str(model_name)+" Prediction")
     fig.savefig(scenario+"/predictionpng/"+str(model_name)+"_locprediction.png")
+    print('trajectory plotted')
+    return fig

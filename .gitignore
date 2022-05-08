@@ -7,3 +7,6 @@
 *.png
 *.h5
 *.idea
+*.wandb
+wandb
+logs

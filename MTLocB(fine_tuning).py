@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Wed Apr 27 16:05:50 2022
+Created on Mon May  9 00:18:51 2022
 
 @author: weixijia
 """
-
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -23,6 +22,15 @@ from tensorflow.keras.optimizers import Adam, RMSprop
 from tensorflow.keras.callbacks import EarlyStopping, Callback, TensorBoard
 from tensorflow.keras.utils import plot_model
 
+import wandb
+from wandb.keras import WandbCallback
+
+wandb.init(project="mtloc_finetuning", entity="geeeeker")
+
+
+
+# ... Define a model
+
 
 #Choose Scenario: Type A or B to select loading data.
 FLAGS=v.choose_scenario('B')
@@ -32,9 +40,12 @@ hidden_size = FLAGS.hidden_size
 batch_size = FLAGS.batch_size
 scenario=FLAGS.scenario
 
-epoch = 1
+epoch = 100
 learning_rate = 0.0025
-model_name = 'MTLocB'
+model_name = 'MTLocB_8'
+
+
+
 
 #Load data
 SensorTrain=np.load(scenario+"/overlap_timestep1000/overlap_ds_sensor_train.npy")
@@ -68,7 +79,7 @@ IMU_Model=load_model("scenarioA/model/IMU_Model.h5")
 
 #extract lstm layer from trained model    
 lstm_extracted=IMU_Model.get_layer('lstm')
-lstm_extracted.trainable = False #make transfered layer non-trainable
+lstm_extracted.trainable = True #make transfered layer trainable
 
 
 #Construct mmloc model
@@ -100,9 +111,34 @@ tensorboard = TensorBoard(log_dir='logs/{}'.format(model_name))
 
 MTLoc.fit([IMUTrain,MagTrain,WifiTrain], locationtrain,
                        validation_data=([IMUVal,MagVal,WifiVal],locationval),
-                       epochs=epoch, batch_size=batch_size, verbose=1,callbacks=[tensorboard]
+                       epochs=epoch, batch_size=batch_size, verbose=1,callbacks=[tensorboard,WandbCallback()]
                        #shuffle=False,
                        )
 
 #save model
 MTLoc.save(scenario+"/model/"+str(model_name)+"plot.h5")
+
+#Plot
+    
+locPrediction = MTLoc.predict([IMUTest,MagTest,WifiTest], batch_size=batch_size)
+aveLocPrediction = v.get_ave_prediction(locPrediction, batch_size)
+
+#visualization for error line and location prediction
+error = v.visualization(locationtest,locPrediction,model_name)
+#print location prediction picture
+trajectory = v.print_locprediction(locationtest,aveLocPrediction,model_name,scenario)
+#draw cdf picture
+cdf = v.draw_cdf_picture(locationtest,locPrediction,model_name,scenario)
+
+
+wandb.config = {
+  "Scenario": scenario,
+  "Model": model_name,
+  "learning_rate": learning_rate,
+  "epochs": epoch,
+  "CDF": plt,
+  "error": error,
+  "trajectory": trajectory,
+  "cdf": cdf,
+  "batch_size": batch_size
+}
