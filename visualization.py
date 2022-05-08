@@ -38,6 +38,58 @@ def choose_scenario(scenario):
         FLAGS = flags.FLAGS
     return FLAGS    
 
+def get_imu_labels(df, pointsnumber, step):
+    count=0
+    label=0
+    round=0
+    a=np.zeros((1,2))
+    #for num in range(0,2*(pointsnumber-2)+1):
+    for i in df.iloc[:,0]:
+        if  count==0:
+            t=np.array([[i-1,label]])
+            a=np.concatenate((a,t),axis=0)
+            count=count+1
+            label=label+1
+            #num=num+1
+            # if num==df.iloc[i,0]-step:
+            #     label=label+1
+            #     print('here1')
+            
+    
+        elif 0 < count < pointsnumber-1:
+            t=np.array([[i-step,label]])
+            a=np.concatenate((a,t),axis=0)
+            label=label+1
+            t=np.array([[i+step,label]])
+            a=np.concatenate((a,t),axis=0)
+            count=count+1
+            label=label+1
+            if label==(2*(pointsnumber-2)+1):
+                label=2*(pointsnumber-2)
+    
+        else:
+            t=np.array([[i,label]])
+            a=np.concatenate((a,t),axis=0)
+            count=0
+            label=0
+    
+            round=round+1
+            print('Round '+str(round)+' finish')
+    a=a[1::] #drop the first initial row of zeros
+    
+    cnt=0
+    b=np.zeros((1,2))
+    
+    for i in range (0, int(a[-1,0])+1):
+        if i == a[cnt,0]:
+            tag=a[cnt,1]
+            cnt=cnt+1
+        tem=np.array([[i,tag]])
+        b=np.concatenate((b,tem),axis=0)
+    b=b[1::]    
+    b=b[:,1]
+    return b
+
 def normalized_data_to_utm(dd):
 #for scenarioa
     min_c1 = 0
