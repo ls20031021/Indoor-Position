@@ -43,8 +43,9 @@ scenario=FLAGS.scenario
 epoch = 100
 learning_rate = 0.0025
 
-num_rounds=0
+num_rounds=6
 model_name = 'MTLocB_'+str(num_rounds)
+
 
 
 #Load data
@@ -162,15 +163,3 @@ trajectory = v.print_locprediction(locationtest,aveLocPrediction,model_name,scen
 #draw cdf picture
 cdf = v.draw_cdf_picture(locationtest,locPrediction,model_name,scenario)
 
-
-wandb.config = {
-  "Scenario": scenario,
-  "Model": model_name,
-  "learning_rate": learning_rate,
-  "epochs": epoch,
-  "CDF": plt,
-  "error": error,
-  "trajectory": trajectory,
-  "cdf": cdf,
-  "batch_size": batch_size
-}
