@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Mon May  9 00:18:51 2022
+Created on Mon May  9 10:18:51 2022
 
 @author: weixijia
 """
@@ -43,7 +43,7 @@ scenario=FLAGS.scenario
 epoch = 100
 learning_rate = 0.0025
 
-num_rounds=5
+num_rounds=3
 model_name = 'MTLocB_'+str(num_rounds)
 
 

@@ -43,7 +43,7 @@ scenario=FLAGS.scenario
 epoch = 100
 learning_rate = 0.0025
 
-num_rounds=6
+num_rounds=2
 model_name = 'MTLocB_'+str(num_rounds)
 
 
