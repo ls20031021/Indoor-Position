@@ -38,7 +38,6 @@ scenario=FLAGS.scenario
 model=load_model(scenario+"/model/"+str(model_name)+".h5")
 
 def Analysis(model,model_name,scenario,batch_size):
-    
     #Load data
     SensorTrain=np.load(scenario+"/overlap_timestep1000/overlap_ds_sensor_train.npy")
     locationtrain=np.load(scenario+"/overlap_timestep1000/overlap_ds_location_train.npy")
@@ -88,7 +87,7 @@ def Analysis(model,model_name,scenario,batch_size):
             plt.scatter(target[0], target[1], label='Target' if i == 0 else "", color='c', marker='.')
     ax.set_title("Prection Trajectory")
     ax.legend(loc='upper right')
-    fig.savefig("errors_visualization_" + str(model_name) + ".pdf")
+    fig.savefig(scenario+"/errorpng/errors_visualization_" + str(model_name) + ".pdf")
     
     #Plot smooth path
     fig=plt.figure()
@@ -106,13 +105,16 @@ def Analysis(model,model_name,scenario,batch_size):
     df=pd.concat([Y_pre, Y_test], axis=1)
     df.columns=['Pre_x','Pre_y', 'Target_x','Target_y']
     df['Error']= ((df['Pre_x']-df['Target_x'])**2+(df['Pre_y']-df['Target_y'])**2)**(1/2)
-    Analysis=df['Error'].describe()
+    Analysis=pd.DataFrame(df['Error'].describe())
+    
+    
+    
     print (Analysis)
     return Analysis
 
  
 Analysis=Analysis(model,model_name,scenario,batch_size)
-
+Analysis.to_csv(str(model_name)+'_describe.csv')
 
 
 
