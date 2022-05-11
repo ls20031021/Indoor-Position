@@ -24,7 +24,7 @@ from tensorflow.keras.callbacks import EarlyStopping, Callback, TensorBoard
 from tensorflow.keras.utils import plot_model
 
 
-model_name = 'MTLocB'
+model_name = 'MTLocB_0plot'
 #Choose Scenario: Type A or B to select loading data.
 FLAGS=v.choose_scenario('B')
 
