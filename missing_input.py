@@ -27,9 +27,9 @@ from tensorflow.keras.utils import plot_model
 #masking ratio, 1 for masking all values as zero. 0 for keep as origin
 wifi_ratio=0
 mag_ratio=0
-imu_ratio=0.0
+imu_ratio=0.4
 
-model_name = 'MTLocB_5plot'
+model_name = 'MMLocB'
 #Choose Scenario: Type A or B to select loading data.
 FLAGS=v.choose_scenario('B')
 
@@ -99,7 +99,10 @@ if 0 < wifi_ratio < 1:
 elif wifi_ratio==1:
     WifiTest[:,:]=0
     
-locPrediction = model.predict([IMUTest,MagTest,WifiTest], batch_size=batch_size)
+SensorTest=np.concatenate((IMUTest, MagTest),axis=2)
+    
+#locPrediction = model.predict([IMUTest,MagTest,WifiTest], batch_size=batch_size)
+locPrediction = model.predict([SensorTest,WifiTest], batch_size=batch_size)
 bin_edge,cdf=v.cdfdiff(target=locationtest,predict=locPrediction)
 aveLocPrediction = v.get_ave_prediction(locPrediction, batch_size)
 

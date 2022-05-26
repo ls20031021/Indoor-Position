@@ -34,7 +34,7 @@ scenario=FLAGS.scenario
 
 epoch = 1
 learning_rate = 0.0025
-model_name = 'MTLocB'
+model_name = 'MTLocBforplot'
 
 #Load data
 SensorTrain=np.load(scenario+"/overlap_timestep1000/overlap_ds_sensor_train.npy")
@@ -74,14 +74,14 @@ lstm_extracted.trainable = False #make transfered layer non-trainable
 #Construct mmloc model
 
 
-imuinput=Input(shape=(IMUTrain.shape[1], IMUTrain.shape[2]),name="IMU")
+imuinput=Input(shape=(IMUTrain.shape[1], IMUTrain.shape[2]),name="IMU-LSTM")
 imuoutput=lstm_extracted(imuinput)
 
 
-maginput=Input(shape=(MagTrain.shape[1], MagTrain.shape[2]),name="MAG")
+maginput=Input(shape=(MagTrain.shape[1], MagTrain.shape[2]),name="MAG-LSTM")
 magoutput=LSTM(input_shape=(MagTrain.shape[1], MagTrain.shape[2]),units=hidden_size,name="MAG_Feature")(maginput)
 
-wifiinput=Input(shape=(wifi_input_size,),name="WiFi")
+wifiinput=Input(shape=(wifi_input_size,),name="WiFi-DNN")
 wifi=Dense(hidden_size,name="Dense_WiFi_1")(wifiinput)
 wifi=ReLU()(wifi)
 wifi=Dense(hidden_size,name="Dense_WiFi_2")(wifi)
