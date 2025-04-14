@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Feb 27 12:01:12 2020
 
-@author: mwei_archor
-"""
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -22,7 +18,7 @@ np.random.seed(7)
 
 # Hyper-parameters
 flags.DEFINE_string("scenario", default="scenarioA", help="select scenarioA or scenarioB")
-flags.DEFINE_integer("wifi_input_size", default="102", help="wifi rss feature numbers")
+flags.DEFINE_integer("wifi_input_size", default="22", help="wifi rss feature numbers")
 flags.DEFINE_integer("hidden_size", default="128", help="hidden size of deep learning models")
 flags.DEFINE_float("learning_rate", default="0.005", help="learning rate")
 flags.DEFINE_integer("batch_size", default="100", help="training batch sizes")

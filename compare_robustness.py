@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Fri May 13 20:22:39 2022
-
-@author: weixijia
-"""
 
 
 import numpy as np
@@ -61,8 +56,8 @@ MagTest=SensorTest[:,:,2:3]
 original_mag_test=IMUTest
 
 
-wifi_ratio=0.4
-mag_ratio=0
+wifi_ratio=0
+mag_ratio=0.4
 imu_ratio=0
 
 mag_random_list = []

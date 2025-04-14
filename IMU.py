@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Apr 27 09:55:41 2022
 
-@author: weixijia
-"""
 #This model is to tran an independent model for IMU dataset
 import numpy as np
 import matplotlib.pyplot as plt
