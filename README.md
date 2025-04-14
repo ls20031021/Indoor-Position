@@ -1,26 +1,25 @@
 # MM-Loc
 
-This is the code repo for paper MM-Loc: Cross-sensor Indoor Smartphone Location Tracking using Multimodal Deep Neural Networks.
+This is the code repository for the paper:
 
-# Dataprocessing
+**MM-Loc: Cross-sensor Indoor Smartphone Location Tracking using Multimodal Deep Neural Networks**
 
-Convert raw data to machine learning data, with a readme file for user.
+---
 
-# Train and test
-To debug all models, the following commands can be used as example:
+## 📁 Data Processing
 
-sensor baseline model:
+Convert raw data into machine learning-ready format.
 
+Refer to the included `README` file in the data processing directory for detailed usage instructions.
+
+---
+
+## 🧪 Train and Test
+
+To debug or run all models, the following example commands can be used:
+
+### 🔹 Sensor Baseline Model
+
+```bash
 python sensor_baseline.py --scenario="scenarioA" --hidden_size=128 --learning_rate=0.005 --batch_size=100 --epoch=100
 
-overlap downsample sensor model:
-
-python sensor_baseline.py --scenario="scenarioA" --hidden_size=128 --learning_rate=0.005 --batch_size=100 --epoch=100
-
-wifi model:
-
-python sensor_baseline.py --scenario="scenarioA" --wifi_input_size=102 --hidden_size=128 --learning_rate=0.005 --batch_size=100 --epoch=100
-
-mmloc model:
-
-python sensor_baseline.py --scenario="scenarioA" --wifi_input_size=102 --hidden_size=128 --learning_rate=0.005 --batch_size=100 --epoch=100
